@@ -5,6 +5,6 @@ data class Invoice (
     val date: String,
     val expiration: String,
     val services: List<Service>,
-    val total: Double = services.sumOf { it.total },
-    val iban: String
+    val iban: String,
+    val total: Double = services.sumOf { it.total }
 )
