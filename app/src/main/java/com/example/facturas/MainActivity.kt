@@ -35,67 +35,6 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        findViewById<Button>(R.id.add_service_button).setOnClickListener {
-            addServiceView()
-        }
-
-        findViewById<Button>(R.id.emit_button).setOnClickListener {
-            emitInvoice()
-        }
-    }
-
-    private fun addServiceView() {
-        val serviceView = layoutInflater.inflate(R.layout.service_item, servicesContainer, false)
-        servicesContainer.addView(serviceView)
-    }
-
-    private fun emitInvoice() {
-        val invoiceNumber = findViewById<EditText>(R.id.invoice_number).text.toString()
-        val invoiceDate = findViewById<EditText>(R.id.invoice_date).text.toString()
-        val invoiceExpiration = findViewById<EditText>(R.id.invoice_expiration).text.toString()
-
-        val emitter = Person(
-            findViewById<EditText>(R.id.emitter_name).text.toString(),
-            findViewById<EditText>(R.id.emitter_last_name).text.toString(),
-            findViewById<EditText>(R.id.emitter_fiscal_number).text.toString(),
-            findViewById<EditText>(R.id.emitter_address).text.toString(),
-            findViewById<EditText>(R.id.emitter_city_cp).text.toString()
-        )
-
-        val receiver = Person(
-            findViewById<EditText>(R.id.receiver_name).text.toString(),
-            findViewById<EditText>(R.id.receiver_last_name).text.toString(),
-            findViewById<EditText>(R.id.receiver_fiscal_number).text.toString(),
-            findViewById<EditText>(R.id.receiver_address).text.toString(),
-            findViewById<EditText>(R.id.receiver_city_cp).text.toString()
-        )
-
-        val services = mutableListOf<Service>()
-        for (i in 0 until servicesContainer.childCount) {
-            val serviceView = servicesContainer.getChildAt(i)
-            val name = serviceView.findViewById<EditText>(R.id.service_name).text.toString()
-            val price = serviceView.findViewById<EditText>(R.id.service_price).text.toString().toDouble()
-            val discount = serviceView.findViewById<EditText>(R.id.service_discount).text.toString().toDouble()
-            val units = serviceView.findViewById<EditText>(R.id.service_units).text.toString().toInt()
-            val tax = serviceView.findViewById<EditText>(R.id.service_tax).text.toString().toDouble()
-
-            //services.add(Service(name, price, discount, units, tax))
-        }
-
-        val iban = findViewById<EditText>(R.id.emitter_iban).text.toString()
-
-        val invoice = Invoice(
-            id = invoiceNumber,
-            date = invoiceDate,
-            expiration = invoiceExpiration,
-            services = services,
-            iban = iban
-        )
-
-        templateCreation(invoice, emitter, receiver)
-
-        Toast.makeText(this, "Factura emitida", Toast.LENGTH_SHORT).show()
     }
 
     private fun templateCreation(invoice: Invoice, emitter: Person, receiver: Person) {
@@ -183,7 +122,6 @@ class MainActivity : AppCompatActivity() {
             <div>
                 <p><span>Número de Factura:</span> ${numFactura}</p>
                 <p><span>Fecha de Emisión:</span> ${invoice.date}</p>
-                <p><span>Fecha de Vencimiento:</span> ${invoice.expiration}</p>
             </div>
         </div>
         <div class="invoice-parties">
@@ -192,14 +130,15 @@ class MainActivity : AppCompatActivity() {
                 <p>${emitter.name} ${emitter.lastName}</p>
                 <p>${emitter.fiscalNumber}</p>
                 <p>${emitter.address}</p>
-                <p>${emitter.cityCP}</p>
+                <p>${emitter.city}</p>
+                <p>${emitter.cp}</p>
             </div>
             <div style="text-align: right;">
                 <p><span>Receptor:</span></p>
                 <p>${receiver.name} ${receiver.lastName}</p>
                 <p>${receiver.fiscalNumber}</p>
-                <p>${receiver.address}</p>
-                <p>${receiver.cityCP}</p>
+                <p>${emitter.city}</p>
+                <p>${emitter.cp}</p>
             </div>
         </div>
         <table class="invoice-table">
