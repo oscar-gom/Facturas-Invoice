@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             val units = serviceView.findViewById<EditText>(R.id.service_units).text.toString().toInt()
             val tax = serviceView.findViewById<EditText>(R.id.service_tax).text.toString().toDouble()
 
-            services.add(Service(name, price, discount, units, tax))
+            //services.add(Service(name, price, discount, units, tax))
         }
 
         val iban = findViewById<EditText>(R.id.emitter_iban).text.toString()
@@ -218,7 +218,7 @@ class MainActivity : AppCompatActivity() {
             invoice.services.joinToString("") { service ->
                 """
                     <tr>
-                        <td>${service.name}</td>
+                        <td>${service.description}</td>
                         <td>${service.units}</td>
                         <td>${service.discount}%</td>
                         <td>${service.subTotal}</td>
