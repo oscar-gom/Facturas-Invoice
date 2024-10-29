@@ -49,4 +49,13 @@ dependencies {
     //PDF tools
     implementation("com.itextpdf:itext7-core:7.1.15")
     implementation("com.itextpdf:html2pdf:4.0.2")
+
+    //Room
+    val roomVersion = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    implementation("androidx.room:room-paging:$roomVersion")
+    testImplementation("androidx.room:room-testing:$roomVersion")
 }
