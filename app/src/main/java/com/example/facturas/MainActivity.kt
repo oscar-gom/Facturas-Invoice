@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun templateCreation(invoice: Invoice, emitter: Person, receiver: Person) {
 
-        val numFactura = "${Year.now().value}-${invoice.id}"
+        val numFactura = "${Year.now().value}-${invoice.invoiceId}"
         val htmlContent = """
 <!DOCTYPE html>
 <html lang="es">

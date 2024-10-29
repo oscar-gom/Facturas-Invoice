@@ -1,5 +1,6 @@
 package com.example.facturas.models
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
@@ -7,9 +8,9 @@ import java.time.LocalDate
 @Entity
 data class Invoice (
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 1,
+    val invoiceId: Int = 1,
     val date: String = LocalDate.now().toString(),
-    val client: Person,
+    @Embedded val client: Person,
     val services: List<Service>,
     val paymentMethod: PaymentMethod,
     val iban: String?,

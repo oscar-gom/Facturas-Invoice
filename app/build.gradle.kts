@@ -61,4 +61,7 @@ dependencies {
     testImplementation("androidx.room:room-testing:$roomVersion")
     implementation("androidx.room:room-rxjava2:$roomVersion")
     implementation("androidx.room:room-rxjava3:$roomVersion")
+
+    //Others
+    implementation("com.google.code.gson:gson:2.11.0")
 }

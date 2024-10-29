@@ -8,7 +8,7 @@ import java.math.RoundingMode
 @Entity
 data class Service(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val serviceId: Int = 0,
     val description: String,
     val price: Double,
     val discount: Double = 0.0,
