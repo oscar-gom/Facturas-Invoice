@@ -94,6 +94,7 @@
         <!-- Botón Guardar -->
         <Button
             android:id="@+id/save_service_button"
+            style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
