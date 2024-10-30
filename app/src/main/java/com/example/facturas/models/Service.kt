@@ -14,7 +14,7 @@ data class Service(
     val discount: Double = 0.0,
     val units: Int,
     val tax: Double,
-    val subTotal: Double = BigDecimal(price * ((100 - discount) / 100)).setScale(
+    val subTotal: Double = BigDecimal((price * ((100 - discount) / 100)) * units).setScale(
         2,
         RoundingMode.HALF_EVEN
     ).toDouble(),

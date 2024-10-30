@@ -2,17 +2,12 @@ package com.example.facturas
 
 import android.os.Bundle
 import android.os.Environment
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.facturas.models.Invoice
 import com.example.facturas.models.Person
-import com.example.facturas.models.Service
 import com.itextpdf.html2pdf.HtmlConverter
 import java.io.File
 import java.io.FileOutputStream
@@ -20,17 +15,12 @@ import java.time.Year
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var servicesContainer: LinearLayout
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        servicesContainer =
-            findViewById(R.id.services_container)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.emit_button)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.fragmentContainerView)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
