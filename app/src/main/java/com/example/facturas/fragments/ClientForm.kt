@@ -36,6 +36,7 @@ class ClientForm : Fragment() {
         val saveButton = view.findViewById<Button>(R.id.save_client_button)
 
         cpEditText.filters = arrayOf(InputFilter.LengthFilter(5))
+        fiscalNumberEditText.filters = arrayOf(InputFilter.LengthFilter(9))
 
         saveButton.setOnClickListener {
             val name = nameEditText.text.toString()
