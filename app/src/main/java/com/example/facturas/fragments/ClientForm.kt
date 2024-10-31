@@ -123,7 +123,7 @@ class ClientForm : Fragment() {
         val number = fiscalNumber.substring(0, 8).toInt()
 
         val letterNum = number % 23
-        val letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        val letters = "TRWAGMYFPDXBNJZSQVHLCKE"
         val letterCheck = letters[letterNum]
 
         if (letter != letterCheck) {
