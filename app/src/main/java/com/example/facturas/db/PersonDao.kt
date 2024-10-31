@@ -15,6 +15,12 @@ interface PersonDao {
     @Upsert
     fun addPerson(person: Person)
 
+    @Query("SELECT * FROM Person WHERE isUser = 1")
+    fun getUser(): LiveData<Person>
+
     @Delete
     fun deletePerson(person: Person)
+
+    @Query("DELETE FROM Person WHERE isUser = 1")
+    fun deleteUser()
 }
