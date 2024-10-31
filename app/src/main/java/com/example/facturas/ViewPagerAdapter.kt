@@ -7,20 +7,22 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.facturas.fragments.ClientForm
 import com.example.facturas.fragments.ServiceForm
+import com.example.facturas.fragments.UserForm
 
 class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> ClientForm()
-            1 -> ServiceForm()
-            else -> ClientForm()
+            0 -> UserForm()
+            1 -> ClientForm()
+            2 -> ServiceForm()
+            else -> UserForm()
         }
     }
 
     override fun getItemCount(): Int {
         //TODO: Update with new fragments
-        return 2
+        return 3
     }
 
 }

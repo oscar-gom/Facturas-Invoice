@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.facturas.MainApplication
 import com.example.facturas.R
 import com.example.facturas.models.Person
@@ -17,7 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ClientForm : Fragment() {
+class UserForm : Fragment() {
     val db = MainApplication.database
 
     @SuppressLint("MissingInflatedId")
@@ -25,18 +26,29 @@ class ClientForm : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_client_form, container, false)
+        val view = inflater.inflate(R.layout.fragment_user_form, container, false)
 
-        val nameEditText = view.findViewById<EditText>(R.id.client_name)
-        val lastNameEditText = view.findViewById<EditText>(R.id.client_last_name)
-        val fiscalNumberEditText = view.findViewById<EditText>(R.id.client_fiscal_number)
-        val addressEditText = view.findViewById<EditText>(R.id.client_address)
-        val cityEditText = view.findViewById<EditText>(R.id.client_city)
-        val cpEditText = view.findViewById<EditText>(R.id.client_cp)
-        val saveButton = view.findViewById<Button>(R.id.save_client_button)
+        val nameEditText = view.findViewById<EditText>(R.id.user_name)
+        val lastNameEditText = view.findViewById<EditText>(R.id.user_last_name)
+        val fiscalNumberEditText = view.findViewById<EditText>(R.id.user_fiscal_number)
+        val addressEditText = view.findViewById<EditText>(R.id.user_address)
+        val cityEditText = view.findViewById<EditText>(R.id.user_city)
+        val cpEditText = view.findViewById<EditText>(R.id.user_cp)
+        val saveButton = view.findViewById<Button>(R.id.save_user_button)
 
-        cpEditText.filters = arrayOf(InputFilter.LengthFilter(5))
         fiscalNumberEditText.filters = arrayOf(InputFilter.LengthFilter(9))
+        cpEditText.filters = arrayOf(InputFilter.LengthFilter(5))
+
+        db.personDao().getUser().observe(viewLifecycleOwner) { user ->
+            user?.let {
+                nameEditText.setText(it.name)
+                lastNameEditText.setText(it.lastName)
+                fiscalNumberEditText.setText(it.fiscalNumber)
+                addressEditText.setText(it.address)
+                cityEditText.setText(it.city)
+                cpEditText.setText(it.cp)
+            }
+        }
 
         saveButton.setOnClickListener {
             val name = nameEditText.text.toString()
@@ -44,63 +56,61 @@ class ClientForm : Fragment() {
             val fiscalNumber = fiscalNumberEditText.text.toString()
             val address = addressEditText.text.toString()
             val city = cityEditText.text.toString()
-            val cp = cpEditText.text.toString()
+            val cpText = cpEditText.text.toString()
 
             if (name.isEmpty()) {
                 nameEditText.error = "El nombre es obligatorio"
                 return@setOnClickListener
             }
-
             if (lastName.isEmpty()) {
                 lastNameEditText.error = "El apellido es obligatorio"
                 return@setOnClickListener
             }
-
             if (fiscalNumber.isEmpty()) {
-                fiscalNumberEditText.error = "El NIF es obligatorio"
+                fiscalNumberEditText.error = "El número fiscal es obligatorio"
                 return@setOnClickListener
             }
-
             if (address.isEmpty()) {
                 addressEditText.error = "La dirección es obligatoria"
                 return@setOnClickListener
             }
-
             if (city.isEmpty()) {
                 cityEditText.error = "La ciudad es obligatoria"
                 return@setOnClickListener
             }
-
-            if (cp == "00000") {
+            if (cpText.isEmpty()) {
                 cpEditText.error = "El código postal es obligatorio"
                 return@setOnClickListener
             }
 
-            if (fiscalNumber.length != 9) {
-                fiscalNumberEditText.error = "El NIF debe tener 9 dígitos"
+            if (cpText == "00000"){
+                cpEditText.error = "El código postal no puede ser 00000"
                 return@setOnClickListener
             }
 
             if (fiscalNumberCheck(fiscalNumber, fiscalNumberEditText)) return@setOnClickListener
 
-            val person = Person(
-                isUser = false,
+            val user = Person(
                 name = name,
                 lastName = lastName,
                 fiscalNumber = fiscalNumber,
                 address = address,
                 city = city,
-                cp = cp
+                cp = cpText,
+                isUser = true
             )
 
             CoroutineScope(Dispatchers.IO).launch {
-                db.personDao().addPerson(person)
+                db.personDao().deleteUser()
+                db.personDao().addPerson(user)
                 CoroutineScope(Dispatchers.Main).launch {
-                    Toast.makeText(requireContext(), "¡Exito! Cliente añadido a la agenda", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "¡Exito! Usuario guardado", Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
-
         return view
     }
 
