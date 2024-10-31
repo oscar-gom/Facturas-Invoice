@@ -1,166 +1,60 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView2"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewPager">
 
-        <!-- Número de Factura -->
-        <TextView
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Número de Factura"
-            android:textStyle="bold" />
+            android:icon="@drawable/person"
+            android:text="Yo" />
 
-        <EditText
-            android:id="@+id/invoice_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Número de Factura"
-            android:inputType="number" />
-
-        <!-- Fecha de Emisión -->
-        <TextView
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabContacts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Fecha de Emisión"
-            android:textStyle="bold" />
+            android:icon="@drawable/baseline_menu_book_24"
+            android:text="Contactos" />
 
-        <EditText
-            android:id="@+id/invoice_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Fecha de Emisión"
-            android:inputType="datetime|date" />
-
-        <!-- Fecha de Expiración -->
-        <TextView
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabService"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Fecha de Expiración"
-            android:textStyle="bold" />
+            android:icon="@drawable/baseline_room_service_24"
+            android:text="Servicios" />
 
-        <EditText
-            android:id="@+id/invoice_expiration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Fecha de Expiración"
-            android:inputType="datetime|date" />
-
-        <!-- Emisor -->
-        <TextView
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabInvoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Datos del Emisor"
-            android:textStyle="bold" />
+            android:icon="@drawable/baseline_attach_money_24"
+            android:text="Facturas" />
+    </com.google.android.material.tabs.TabLayout>
 
-        <EditText
-            android:id="@+id/emitter_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nombre" />
-
-        <EditText
-            android:id="@+id/emitter_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Apellido" />
-
-        <EditText
-            android:id="@+id/emitter_fiscal_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Número Fiscal" />
-
-        <EditText
-            android:id="@+id/emitter_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Dirección" />
-
-        <EditText
-            android:id="@+id/emitter_city_cp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ciudad y CP" />
-
-        <EditText
-            android:id="@+id/emitter_iban"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="IBAN" />
-
-        <!-- Receptor -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Datos del Receptor"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/receiver_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nombre" />
-
-        <EditText
-            android:id="@+id/receiver_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Apellido" />
-
-        <EditText
-            android:id="@+id/receiver_fiscal_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Número Fiscal" />
-
-        <EditText
-            android:id="@+id/receiver_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Dirección" />
-
-        <EditText
-            android:id="@+id/receiver_city_cp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ciudad y CP" />
-
-        <!-- Servicios -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Servicios"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:id="@+id/services_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-
-        <Button
-            android:id="@+id/add_service_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Añadir Servicio" />
-
-        <!-- Botón Emitir -->
-        <Button
-            android:id="@+id/emit_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Emitir" />
-    </LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
