@@ -11,7 +11,7 @@ data class Invoice (
     val invoiceId: Int = 1,
     val date: String = LocalDate.now().toString(),
     @Embedded val client: Person,
-    val services: List<Service>,
+    val services: List<ServiceInvoice>,
     val paymentMethod: PaymentMethod,
     val iban: String?,
     val total: Double = services.sumOf { it.total }
