@@ -46,7 +46,8 @@ class MainActivity : AppCompatActivity() {
         }.attach()
 
     }
-    private fun templateCreation(invoice: Invoice, emitter: Person, receiver: Person) {
+}
+    /*private fun templateCreation(invoice: Invoice, emitter: Person, receiver: Person) {
         val numFactura = "${Year.now().value}-${invoice.invoiceId}"
         val htmlContent = """
 <!DOCTYPE html>
@@ -200,4 +201,4 @@ class MainActivity : AppCompatActivity() {
         HtmlConverter.convertToPdf(htmlContent, outputStream)
         outputStream.close()
     }
-}
+    */

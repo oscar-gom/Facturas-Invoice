@@ -7,9 +7,9 @@ import java.time.LocalDate
 
 @Entity
 data class Invoice (
-    @PrimaryKey(autoGenerate = true)
-    val invoiceId: Int = 1,
-    val date: String = LocalDate.now().toString(),
+    @PrimaryKey
+    val invoiceId: String,
+    val date: LocalDate = LocalDate.now(),
     @Embedded val client: Person,
     val services: List<ServiceInvoice>,
     val paymentMethod: PaymentMethod,
