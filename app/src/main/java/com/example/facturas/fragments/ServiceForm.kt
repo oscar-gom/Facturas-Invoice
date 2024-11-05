@@ -87,8 +87,6 @@ class ServiceForm : Fragment() {
             val service = Service(
                 description = description,
                 price = price,
-                discount = discount,
-                units = units,
                 tax = tax
             )
 
