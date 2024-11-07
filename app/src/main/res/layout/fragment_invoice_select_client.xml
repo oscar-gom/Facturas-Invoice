@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Título -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selecciona un cliente"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:paddingBottom="16dp" />
+
+        <!-- Spinner de Clientes -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clientes"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinner_clients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Detalles del Cliente -->
+        <TextView
+            android:id="@+id/textview_client_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Detalles del cliente"
+            android:paddingBottom="16dp" />
+
+        <!-- Botón Continuar -->
+        <Button
+            android:id="@+id/button_continue"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continuar" />
+    </LinearLayout>
+</ScrollView>
