@@ -1,6 +1,7 @@
 package com.example.facturas.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.facturas.InvoiceActivity
 import com.example.facturas.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -34,7 +36,13 @@ class StartCreatingInvoice : Fragment() {
             .setMessage("No me hago responsable de ningún mal uso que se haga con la app.")
             .setPositiveButton("Aceptar") { dialog, _ ->
                 dialog.dismiss()
+                startInvoiceActivity()
             }
             .show()
+    }
+
+    private fun startInvoiceActivity() {
+        val intent = Intent(requireContext(), InvoiceActivity::class.java)
+        startActivity(intent)
     }
 }
