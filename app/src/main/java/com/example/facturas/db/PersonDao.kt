@@ -21,6 +21,9 @@ interface PersonDao {
     @Query("SELECT * FROM Person WHERE isUser = 0")
     fun getClients(): LiveData<Person>
 
+    @Query("SELECT * FROM Person WHERE personId = :personId")
+    fun getPersonFromId(personId: Int): Person
+
     @Delete
     fun deletePerson(person: Person)
 

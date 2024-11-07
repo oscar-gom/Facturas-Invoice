@@ -41,6 +41,11 @@ class InvoiceSelectClient : Fragment() {
 
         loadClients()
 
+        buttonContinue.setOnClickListener {
+            val selectedClient = db.personDao().getPersonFromId(clients[spinnerClients.selectedItemPosition].personId).personId
+
+        }
+
         return view
     }
 
