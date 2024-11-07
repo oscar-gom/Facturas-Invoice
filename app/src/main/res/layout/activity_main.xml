@@ -26,35 +26,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewPager">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabMe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/person"
-            android:text="Yo" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabContacts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/baseline_menu_book_24"
-            android:text="Contactos" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabService"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/baseline_room_service_24"
-            android:text="Servicios" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabInvoice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/baseline_attach_money_24"
-            android:text="Facturas" />
-    </com.google.android.material.tabs.TabLayout>
+        app:layout_constraintTop_toBottomOf="@+id/viewPager"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

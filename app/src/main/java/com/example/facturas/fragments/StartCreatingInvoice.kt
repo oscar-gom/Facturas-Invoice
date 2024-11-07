@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.facturas.InvoiceActivity
+import androidx.navigation.fragment.findNavController
 import com.example.facturas.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -36,13 +36,9 @@ class StartCreatingInvoice : Fragment() {
             .setMessage("No me hago responsable de ningún mal uso que se haga con la app.")
             .setPositiveButton("Aceptar") { dialog, _ ->
                 dialog.dismiss()
-                startInvoiceActivity()
+                //startInvoiceActivity()
+                //findNavController().navigate(R.id.action_startCreatingInvoice_to_invoiceSelectClient)
             }
             .show()
-    }
-
-    private fun startInvoiceActivity() {
-        val intent = Intent(requireContext(), InvoiceActivity::class.java)
-        startActivity(intent)
     }
 }

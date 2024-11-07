@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_invoice"
+    app:startDestination="@id/startCreatingInvoice">
+
+    <fragment
+        android:id="@+id/startCreatingInvoice"
+        android:name="com.example.facturas.fragments.StartCreatingInvoice"
+        android:label="fragment_start_creating_invoice"
+        tools:layout="@layout/fragment_start_creating_invoice" />
+</navigation>
