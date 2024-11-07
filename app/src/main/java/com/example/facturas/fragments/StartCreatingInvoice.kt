@@ -36,8 +36,7 @@ class StartCreatingInvoice : Fragment() {
             .setMessage("No me hago responsable de ningún mal uso que se haga con la app.")
             .setPositiveButton("Aceptar") { dialog, _ ->
                 dialog.dismiss()
-                //startInvoiceActivity()
-                //findNavController().navigate(R.id.action_startCreatingInvoice_to_invoiceSelectClient)
+                findNavController().navigate(R.id.action_startCreatingInvoice_to_invoiceSelectClient)
             }
             .show()
     }
