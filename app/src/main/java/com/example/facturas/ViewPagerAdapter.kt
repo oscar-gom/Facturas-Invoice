@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.facturas.fragments.ClientForm
 import com.example.facturas.fragments.InvoiceSelectClient
 import com.example.facturas.fragments.ServiceForm
+import com.example.facturas.fragments.StartCreatingInvoice
 import com.example.facturas.fragments.UserForm
 
 class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
@@ -16,7 +17,7 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
             0 -> UserForm()
             1 -> ClientForm()
             2 -> ServiceForm()
-            3 -> InvoiceSelectClient()
+            3 -> StartCreatingInvoice()
             else -> UserForm()
         }
     }
