@@ -2,8 +2,6 @@ package com.example.facturas.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 @Entity
 data class Service(

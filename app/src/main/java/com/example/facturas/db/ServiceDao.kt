@@ -20,6 +20,9 @@ interface ServiceDao {
     @Query("SELECT * FROM Service WHERE description LIKE :description")
     fun getServiceByDescription(description: String): Service
 
+    @Query("SELECT EXISTS(SELECT 1 FROM Service WHERE description = :description)")
+    fun isDescriptionExists(description: String): Boolean
+
     @Upsert
     fun addService(service: Service)
 

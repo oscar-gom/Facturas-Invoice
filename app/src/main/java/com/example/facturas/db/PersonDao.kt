@@ -24,6 +24,9 @@ interface PersonDao {
     @Query("SELECT * FROM Person WHERE personId = :personId")
     fun getPersonFromId(personId: Int): Person
 
+    @Query("SELECT EXISTS(SELECT 1 FROM Person WHERE fiscalNumber = :fiscalNumber)")
+    fun isFiscalNumberExists(fiscalNumber: String): Boolean
+
     @Delete
     fun deletePerson(person: Person)
 

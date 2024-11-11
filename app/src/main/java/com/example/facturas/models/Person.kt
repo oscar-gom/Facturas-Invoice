@@ -13,5 +13,6 @@ data class Person (
     val fiscalNumber: String,
     val address: String,
     val city: String,
-    val cp: String
+    val cp: String,
+    val iban: String? // Only for users
 )
