@@ -55,10 +55,14 @@
             android:name="clientId"
             app:argType="integer" />
         <argument
-            android:name="services"
-            app:argType="string" />
+            android:name="servicesId"
+            app:argType="integer[]" />
         <action
             android:id="@+id/action_invoiceSelectSummary_to_startCreatingInvoice2"
             app:destination="@id/startCreatingInvoice" />
+        <argument
+            android:name="servicesPrices"
+            app:argType="float[]" />
+        <argument android:name="servicesDiscount" />
     </fragment>
 </navigation>

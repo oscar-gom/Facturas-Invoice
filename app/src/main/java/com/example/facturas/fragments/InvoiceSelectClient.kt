@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.facturas.MainApplication
 import com.example.facturas.R
 import com.example.facturas.models.Person
@@ -42,8 +43,12 @@ class InvoiceSelectClient : Fragment() {
         loadClients()
 
         buttonContinue.setOnClickListener {
-            val selectedClient = db.personDao().getPersonFromId(clients[spinnerClients.selectedItemPosition].personId).personId
-
+            val selectedClient = clients[spinnerClients.selectedItemPosition].personId
+            findNavController().navigate(
+                InvoiceSelectClientDirections.actionInvoiceSelectClientToInvoiceSelectServices(
+                    selectedClient
+                )
+            )
         }
 
         return view
