@@ -10,16 +10,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.example.facturas.MainApplication
 import com.example.facturas.R
 import com.example.facturas.models.Person
+import com.example.facturas.utilities.PersonUtilities
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class UserForm : Fragment() {
     val db = MainApplication.database
+    val utilities = PersonUtilities()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -58,37 +59,21 @@ class UserForm : Fragment() {
             val city = cityEditText.text.toString()
             val cpText = cpEditText.text.toString()
 
-            if (name.isEmpty()) {
-                nameEditText.error = "El nombre es obligatorio"
-                return@setOnClickListener
-            }
-            if (lastName.isEmpty()) {
-                lastNameEditText.error = "El apellido es obligatorio"
-                return@setOnClickListener
-            }
-            if (fiscalNumber.isEmpty()) {
-                fiscalNumberEditText.error = "El número fiscal es obligatorio"
-                return@setOnClickListener
-            }
-            if (address.isEmpty()) {
-                addressEditText.error = "La dirección es obligatoria"
-                return@setOnClickListener
-            }
-            if (city.isEmpty()) {
-                cityEditText.error = "La ciudad es obligatoria"
-                return@setOnClickListener
-            }
-            if (cpText.isEmpty()) {
-                cpEditText.error = "El código postal es obligatorio"
+            if (!utilities.isEditTextsCorrect(
+                    nameEditText,
+                    lastNameEditText,
+                    fiscalNumberEditText,
+                    addressEditText,
+                    cityEditText,
+                    cpEditText
+                )
+            ) {
                 return@setOnClickListener
             }
 
-            if (cpText == "00000"){
-                cpEditText.error = "El código postal no puede ser 00000"
+            if (utilities.fiscalNumberCheck(fiscalNumber, fiscalNumberEditText)) {
                 return@setOnClickListener
             }
-
-            if (fiscalNumberCheck(fiscalNumber, fiscalNumberEditText)) return@setOnClickListener
 
             val user = Person(
                 name = name,
@@ -97,7 +82,8 @@ class UserForm : Fragment() {
                 address = address,
                 city = city,
                 cp = cpText,
-                isUser = true
+                isUser = true,
+                iban = null
             )
 
             CoroutineScope(Dispatchers.IO).launch {
@@ -114,33 +100,4 @@ class UserForm : Fragment() {
         return view
     }
 
-    private fun fiscalNumberCheck(
-        fiscalNumber: String,
-        fiscalNumberEditText: EditText
-    ): Boolean {
-        for (i in 0 until fiscalNumber.length - 1) {
-            if (!fiscalNumber[i].isDigit()) {
-                fiscalNumberEditText.error = "El NIF debe tener 8 dígitos y una letra"
-                return true
-            }
-        }
-
-        if (!fiscalNumber[8].isLetter()) {
-            fiscalNumberEditText.error = "El NIF debe tener 8 dígitos y una letra"
-            return true
-        }
-
-        val letter = fiscalNumber[8].uppercaseChar()
-        val number = fiscalNumber.substring(0, 8).toInt()
-
-        val letterNum = number % 23
-        val letters = "TRWAGMYFPDXBNJZSQVHLCKE"
-        val letterCheck = letters[letterNum]
-
-        if (letter != letterCheck) {
-            fiscalNumberEditText.error = "El NIF no es válido"
-            return true
-        }
-        return false
-    }
 }
