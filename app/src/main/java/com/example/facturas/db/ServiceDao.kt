@@ -14,6 +14,12 @@ interface ServiceDao {
     @Query("SELECT * FROM Service")
     fun getAllServices(): LiveData<List<Service>>
 
+    @Query("SELECT * FROM Service WHERE serviceId = :serviceId")
+    fun getService(serviceId: Int): Service
+
+    @Query("SELECT * FROM Service WHERE description LIKE :description")
+    fun getServiceByDescription(description: String): Service
+
     @Upsert
     fun addService(service: Service)
 

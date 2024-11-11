@@ -7,8 +7,8 @@ import java.time.LocalDate
 
 @Entity
 data class Invoice (
-    @PrimaryKey
-    val invoiceId: String,
+    @PrimaryKey(autoGenerate = true)
+    val invoiceId: Int = 0,
     val date: LocalDate = LocalDate.now(),
     @Embedded val client: Person,
     val services: List<ServiceInvoice>,

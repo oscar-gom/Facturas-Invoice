@@ -61,8 +61,9 @@
             android:id="@+id/action_invoiceSelectSummary_to_startCreatingInvoice2"
             app:destination="@id/startCreatingInvoice" />
         <argument
-            android:name="servicesPrices"
+            android:name="servicesUnits"
+            app:argType="integer[]" />
+        <argument android:name="servicesDiscount"
             app:argType="float[]" />
-        <argument android:name="servicesDiscount" />
     </fragment>
 </navigation>
