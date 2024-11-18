@@ -101,6 +101,12 @@ class ClientForm : Fragment() {
                     "¡Exito! Cliente añadido a la agenda",
                     Toast.LENGTH_SHORT
                 ).show()
+                nameEditText.text.clear()
+                lastNameEditText.text.clear()
+                fiscalNumberEditText.text.clear()
+                addressEditText.text.clear()
+                cityEditText.text.clear()
+                cpEditText.text.clear()
             }
         }
     }
