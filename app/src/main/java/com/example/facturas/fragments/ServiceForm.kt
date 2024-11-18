@@ -21,15 +21,12 @@ class ServiceForm : Fragment() {
     val db = MainApplication.database
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_service_form, container, false)
 
         val descriptionEditText = view.findViewById<EditText>(R.id.service_description)
         val priceEditText = view.findViewById<EditText>(R.id.service_price)
-        val discountEditText = view.findViewById<EditText>(R.id.service_discount)
-        val unitsEditText = view.findViewById<EditText>(R.id.service_units)
         val taxSpinner = view.findViewById<Spinner>(R.id.service_tax)
         val saveButton = view.findViewById<Button>(R.id.save_service_button)
 
@@ -43,8 +40,6 @@ class ServiceForm : Fragment() {
         saveButton.setOnClickListener {
             val description = descriptionEditText.text.toString()
             val priceText = priceEditText.text.toString()
-            val discountText = discountEditText.text.toString()
-            val unitsText = unitsEditText.text.toString()
             val taxText = taxSpinner.selectedItem.toString().replace("%", "")
 
             // Check empty spaces
@@ -56,18 +51,8 @@ class ServiceForm : Fragment() {
                 priceEditText.error = "El precio es obligatorio"
                 return@setOnClickListener
             }
-            if (discountText.isEmpty()) {
-                discountEditText.error = "El descuento es obligatorio"
-                return@setOnClickListener
-            }
-            if (unitsText.isEmpty()) {
-                unitsEditText.error = "Las unidades son obligatorias"
-                return@setOnClickListener
-            }
 
             val price = priceText.toDouble()
-            val discount = discountText.toDouble()
-            val units = unitsText.toInt()
             val tax = taxText.toDouble()
 
             // Other validations
@@ -75,21 +60,9 @@ class ServiceForm : Fragment() {
                 priceEditText.error = "El precio debe ser mayor a 0"
                 return@setOnClickListener
             }
-            if (discount < 0) {
-                discountEditText.error = "El descuento no puede ser negativo"
-                return@setOnClickListener
-            }
-            if (units <= 0) {
-                unitsEditText.error = "Las unidades deben ser mayor a 0"
-                return@setOnClickListener
-            }
 
             val service = Service(
-                description = description,
-                price = price,
-                discount = discount,
-                units = units,
-                tax = tax
+                description = description, price = price, tax = tax
             )
 
             CoroutineScope(Dispatchers.IO).launch {
@@ -97,12 +70,9 @@ class ServiceForm : Fragment() {
                 CoroutineScope(Dispatchers.Main).launch {
                     descriptionEditText.text.clear()
                     priceEditText.text.clear()
-                    discountEditText.text.clear()
-                    unitsEditText.text.clear()
                     taxSpinner.setSelection(0)
                     Toast.makeText(
-                        requireContext(),
-                        "¡Exito! Servicio creado", Toast.LENGTH_SHORT
+                        requireContext(), "¡Exito! Servicio creado", Toast.LENGTH_SHORT
                     ).show()
                 }
             }

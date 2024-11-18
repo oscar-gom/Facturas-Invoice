@@ -4,15 +4,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Person (
+data class PersonInvoice(
     @PrimaryKey(autoGenerate = true)
-    val personId: Int = 0,
+    val personInvoiceId: Int = 0,
     val isUser: Boolean,
     val name: String,
     val lastName: String,
     val fiscalNumber: String,
     val address: String,
     val city: String,
-    val cp: String,
-    val iban: String? // Only for users
+    val cp: String
 )

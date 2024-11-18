@@ -3,6 +3,7 @@ package com.example.facturas.fragments
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.InputFilter
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +11,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.example.facturas.MainApplication
 import com.example.facturas.R
 import com.example.facturas.models.Person
+import com.example.facturas.utilities.PersonUtilities
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class UserForm : Fragment() {
     val db = MainApplication.database
+    private val utilities = PersonUtilities()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -34,61 +36,57 @@ class UserForm : Fragment() {
         val addressEditText = view.findViewById<EditText>(R.id.user_address)
         val cityEditText = view.findViewById<EditText>(R.id.user_city)
         val cpEditText = view.findViewById<EditText>(R.id.user_cp)
+        val ibanEditText = view.findViewById<EditText>(R.id.user_iban)
         val saveButton = view.findViewById<Button>(R.id.save_user_button)
 
         fiscalNumberEditText.filters = arrayOf(InputFilter.LengthFilter(9))
         cpEditText.filters = arrayOf(InputFilter.LengthFilter(5))
 
-        db.personDao().getUser().observe(viewLifecycleOwner) { user ->
-            user?.let {
-                nameEditText.setText(it.name)
-                lastNameEditText.setText(it.lastName)
-                fiscalNumberEditText.setText(it.fiscalNumber)
-                addressEditText.setText(it.address)
-                cityEditText.setText(it.city)
-                cpEditText.setText(it.cp)
+        CoroutineScope(Dispatchers.IO).launch {
+            val user = db.personDao().getUser()
+            CoroutineScope(Dispatchers.Main).launch {
+                nameEditText.setText(user.name)
+                lastNameEditText.setText(user.lastName)
+                fiscalNumberEditText.setText(user.fiscalNumber)
+                addressEditText.setText(user.address)
+                cityEditText.setText(user.city)
+                cpEditText.setText(user.cp)
+                ibanEditText.setText(user.iban)
             }
         }
 
         saveButton.setOnClickListener {
+            Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
             val name = nameEditText.text.toString()
             val lastName = lastNameEditText.text.toString()
             val fiscalNumber = fiscalNumberEditText.text.toString()
             val address = addressEditText.text.toString()
             val city = cityEditText.text.toString()
             val cpText = cpEditText.text.toString()
+            val iban = ibanEditText.text.toString()
 
-            if (name.isEmpty()) {
-                nameEditText.error = "El nombre es obligatorio"
+            if (!utilities.isEditTextsCorrect(
+                    nameEditText,
+                    lastNameEditText,
+                    fiscalNumberEditText,
+                    addressEditText,
+                    cityEditText,
+                    cpEditText
+                )
+            ) {
                 return@setOnClickListener
             }
-            if (lastName.isEmpty()) {
-                lastNameEditText.error = "El apellido es obligatorio"
-                return@setOnClickListener
-            }
-            if (fiscalNumber.isEmpty()) {
-                fiscalNumberEditText.error = "El número fiscal es obligatorio"
-                return@setOnClickListener
-            }
-            if (address.isEmpty()) {
-                addressEditText.error = "La dirección es obligatoria"
-                return@setOnClickListener
-            }
-            if (city.isEmpty()) {
-                cityEditText.error = "La ciudad es obligatoria"
-                return@setOnClickListener
-            }
-            if (cpText.isEmpty()) {
-                cpEditText.error = "El código postal es obligatorio"
-                return@setOnClickListener
-            }
+            Log.d("UserForm", "EditTexts: passed")
 
-            if (cpText == "00000"){
-                cpEditText.error = "El código postal no puede ser 00000"
+            if (utilities.fiscalNumberCheck(fiscalNumber, fiscalNumberEditText)) {
                 return@setOnClickListener
             }
+            Log.d("UserForm", "FiscalNumber: passed")
 
-            if (fiscalNumberCheck(fiscalNumber, fiscalNumberEditText)) return@setOnClickListener
+            if (utilities.isIbanEmpty(ibanEditText)) {
+                return@setOnClickListener
+            }
+            Log.d("UserForm", "Iban: passed")
 
             val user = Person(
                 name = name,
@@ -97,12 +95,15 @@ class UserForm : Fragment() {
                 address = address,
                 city = city,
                 cp = cpText,
-                isUser = true
+                isUser = true,
+                iban = iban
             )
 
             CoroutineScope(Dispatchers.IO).launch {
                 db.personDao().deleteUser()
+                Log.d("UserForm", "User deleted")
                 db.personDao().addPerson(user)
+                Log.d("UserForm", "User added")
                 CoroutineScope(Dispatchers.Main).launch {
                     Toast.makeText(
                         requireContext(),
@@ -114,33 +115,4 @@ class UserForm : Fragment() {
         return view
     }
 
-    private fun fiscalNumberCheck(
-        fiscalNumber: String,
-        fiscalNumberEditText: EditText
-    ): Boolean {
-        for (i in 0 until fiscalNumber.length - 1) {
-            if (!fiscalNumber[i].isDigit()) {
-                fiscalNumberEditText.error = "El NIF debe tener 8 dígitos y una letra"
-                return true
-            }
-        }
-
-        if (!fiscalNumber[8].isLetter()) {
-            fiscalNumberEditText.error = "El NIF debe tener 8 dígitos y una letra"
-            return true
-        }
-
-        val letter = fiscalNumber[8].uppercaseChar()
-        val number = fiscalNumber.substring(0, 8).toInt()
-
-        val letterNum = number % 23
-        val letters = "TRWAGMYFPDXBNJZSQVHLCKE"
-        val letterCheck = letters[letterNum]
-
-        if (letter != letterCheck) {
-            fiscalNumberEditText.error = "El NIF no es válido"
-            return true
-        }
-        return false
-    }
 }

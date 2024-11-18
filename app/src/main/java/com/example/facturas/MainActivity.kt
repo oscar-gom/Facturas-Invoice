@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
-        val adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+        val adapter = ViewPagerAdapter(this)
         viewPager.adapter = adapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
@@ -46,7 +46,8 @@ class MainActivity : AppCompatActivity() {
         }.attach()
 
     }
-    private fun templateCreation(invoice: Invoice, emitter: Person, receiver: Person) {
+}
+    /*private fun templateCreation(invoice: Invoice, emitter: Person, receiver: Person) {
         val numFactura = "${Year.now().value}-${invoice.invoiceId}"
         val htmlContent = """
 <!DOCTYPE html>
@@ -200,4 +201,4 @@ class MainActivity : AppCompatActivity() {
         HtmlConverter.convertToPdf(htmlContent, outputStream)
         outputStream.close()
     }
-}
+    */

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_user"
+    app:startDestination="@id/userForm">
+
+    <fragment
+        android:id="@+id/userForm"
+        android:name="com.example.facturas.fragments.UserForm"
+        android:label="UserForm" />
+</navigation>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_invoice"
+    app:startDestination="@id/startCreatingInvoice">
+
+    <fragment
+        android:id="@+id/startCreatingInvoice"
+        android:name="com.example.facturas.fragments.StartCreatingInvoice"
+        android:label="fragment_start_creating_invoice"
+        tools:layout="@layout/fragment_start_creating_invoice" >
+        <action
+            android:id="@+id/action_startCreatingInvoice_to_invoiceSelectClient"
+            app:destination="@id/invoiceSelectClient"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/invoiceSelectClient"
+        android:name="com.example.facturas.fragments.InvoiceSelectClient"
+        android:label="InvoiceSelectClient" >
+        <action
+            android:id="@+id/action_invoiceSelectClient_to_invoiceSelectServices"
+            app:destination="@id/invoiceSelectServices"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/invoiceSelectServices"
+        android:name="com.example.facturas.fragments.InvoiceSelectServices"
+        android:label="fragment_invoice_select_services"
+        tools:layout="@layout/fragment_invoice_select_services" >
+        <action
+            android:id="@+id/action_invoiceSelectServices_to_invoiceSelectSummary"
+            app:destination="@id/invoiceSelectSummary"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <argument
+            android:name="clientId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/invoiceSelectSummary"
+        android:name="com.example.facturas.fragments.InvoiceSelectSummary"
+        android:label="fragment_invoice_select_summary"
+        tools:layout="@layout/fragment_invoice_select_summary" >
+        <argument
+            android:name="clientId"
+            app:argType="integer" />
+        <argument
+            android:name="servicesId"
+            app:argType="integer[]" />
+        <action
+            android:id="@+id/action_invoiceSelectSummary_to_startCreatingInvoice2"
+            app:destination="@id/startCreatingInvoice" />
+        <argument
+            android:name="servicesUnits"
+            app:argType="integer[]" />
+        <argument android:name="servicesDiscount"
+            app:argType="float[]" />
+    </fragment>
+</navigation>

@@ -1,40 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:paddingBottom="16dp">
 
-    <EditText
-        android:id="@+id/service_name"
+    <!-- Spinner de Servicios -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Servicio"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/spinner_services"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre del Servicio" />
+        android:layout_marginBottom="16dp" />
+
+    <!-- Unidades -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unidades"
+        android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/service_price"
+        android:id="@+id/edittext_units"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Precio"
-        android:inputType="numberDecimal" />
+        android:hint="1"
+        android:inputType="number"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Descuento -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descuento (%)"
+        android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/service_discount"
+        android:id="@+id/edittext_discount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Descuento"
-        android:inputType="numberDecimal" />
-
-    <EditText
-        android:id="@+id/service_units"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Unidades"
-        android:inputType="number" />
-
-    <EditText
-        android:id="@+id/service_tax"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="IVA"
-        android:inputType="numberDecimal" />
+        android:hint="0"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="16dp" />
 </LinearLayout>

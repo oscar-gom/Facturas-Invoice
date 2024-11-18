@@ -5,9 +5,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.facturas.models.Invoice
 import com.example.facturas.models.Person
+import com.example.facturas.models.PersonInvoice
 import com.example.facturas.models.Service
+import com.example.facturas.models.ServiceInvoice
 
-@Database(entities = [Service::class, Person::class, Invoice::class], version = 1)
+@Database(entities = [Service::class, Person::class, Invoice::class, PersonInvoice::class, ServiceInvoice::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class InvoiceDatabase: RoomDatabase() {
 
@@ -18,4 +20,6 @@ abstract class InvoiceDatabase: RoomDatabase() {
     abstract fun serviceDao(): ServiceDao
     abstract fun personDao(): PersonDao
     abstract fun invoiceDao(): InvoiceDao
+    abstract fun personInvoiceDao(): PersonInvoiceDao
+    abstract fun serviceInvoiceDao(): ServiceInvoiceDao
 }

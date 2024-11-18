@@ -8,11 +8,11 @@ import java.time.LocalDate
 @Entity
 data class Invoice (
     @PrimaryKey(autoGenerate = true)
-    val invoiceId: Int = 1,
-    val date: String = LocalDate.now().toString(),
+    val invoiceId: Int = 0,
+    val date: LocalDate = LocalDate.now(),
     @Embedded val client: Person,
-    val services: List<Service>,
+    val services: List<ServiceInvoice>,
     val paymentMethod: PaymentMethod,
-    val iban: String?,
+    val invoiceIban: String?,
     val total: Double = services.sumOf { it.total }
 )

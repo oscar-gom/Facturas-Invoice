@@ -49,34 +49,8 @@
             android:inputType="numberDecimal" />
 
         <!-- Descuento -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Descuento"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/service_discount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Descuento"
-            android:inputType="numberDecimal" />
 
         <!-- Unidades -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Unidades"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/service_units"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Unidades"
-            android:inputType="number" />
 
         <!-- IVA -->
         <TextView
