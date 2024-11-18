@@ -102,6 +102,20 @@
             android:layout_height="wrap_content"
             android:hint="Código Postal" />
 
+        <!-- IBAN -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="IBAN"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/user_iban"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="IBAN" />
+
         <!-- Botón Guardar -->
         <Button
             android:id="@+id/save_user_button"

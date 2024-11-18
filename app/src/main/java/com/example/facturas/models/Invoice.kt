@@ -13,6 +13,6 @@ data class Invoice (
     @Embedded val client: Person,
     val services: List<ServiceInvoice>,
     val paymentMethod: PaymentMethod,
-    val iban: String?,
+    val invoiceIban: String?,
     val total: Double = services.sumOf { it.total }
 )

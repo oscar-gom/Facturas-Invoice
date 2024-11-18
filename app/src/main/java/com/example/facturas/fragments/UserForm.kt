@@ -35,6 +35,7 @@ class UserForm : Fragment() {
         val addressEditText = view.findViewById<EditText>(R.id.user_address)
         val cityEditText = view.findViewById<EditText>(R.id.user_city)
         val cpEditText = view.findViewById<EditText>(R.id.user_cp)
+        val ibanEditText = view.findViewById<EditText>(R.id.user_iban)
         val saveButton = view.findViewById<Button>(R.id.save_user_button)
 
         fiscalNumberEditText.filters = arrayOf(InputFilter.LengthFilter(9))
@@ -48,6 +49,7 @@ class UserForm : Fragment() {
                 addressEditText.setText(it.address)
                 cityEditText.setText(it.city)
                 cpEditText.setText(it.cp)
+                ibanEditText.setText(it.iban)
             }
         }
 
@@ -58,6 +60,7 @@ class UserForm : Fragment() {
             val address = addressEditText.text.toString()
             val city = cityEditText.text.toString()
             val cpText = cpEditText.text.toString()
+            val iban = ibanEditText.text.toString()
 
             if (!utilities.isEditTextsCorrect(
                     nameEditText,
@@ -83,7 +86,7 @@ class UserForm : Fragment() {
                 city = city,
                 cp = cpText,
                 isUser = true,
-                iban = null
+                iban = iban
             )
 
             CoroutineScope(Dispatchers.IO).launch {
