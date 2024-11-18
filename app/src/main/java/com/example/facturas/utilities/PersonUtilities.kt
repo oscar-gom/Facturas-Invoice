@@ -95,4 +95,13 @@ class PersonUtilities {
 
         return true
     }
+
+    fun isIbanEmpty(ibanEditText: EditText): Boolean {
+        if (ibanEditText.text.toString().isEmpty()) {
+            ibanEditText.error = "El IBAN es obligatorio"
+            return false
+        }
+
+        return true
+    }
 }

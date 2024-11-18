@@ -36,6 +36,7 @@ class ClientForm : Fragment() {
         val cityEditText = view.findViewById<EditText>(R.id.client_city)
         val cpEditText = view.findViewById<EditText>(R.id.client_cp)
         val saveButton = view.findViewById<Button>(R.id.save_client_button)
+        val ibanEditText = "null"
 
         cpEditText.filters = arrayOf(InputFilter.LengthFilter(5))
         fiscalNumberEditText.filters = arrayOf(InputFilter.LengthFilter(9))
@@ -47,7 +48,7 @@ class ClientForm : Fragment() {
                 fiscalNumberEditText,
                 addressEditText,
                 cityEditText,
-                cpEditText
+                cpEditText,
             )
         }
 
@@ -60,7 +61,7 @@ class ClientForm : Fragment() {
         fiscalNumberEditText: EditText,
         addressEditText: EditText,
         cityEditText: EditText,
-        cpEditText: EditText
+        cpEditText: EditText,
     ) {
         val name = nameEditText.text.toString()
         val lastName = lastNameEditText.text.toString()

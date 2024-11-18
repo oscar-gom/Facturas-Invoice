@@ -78,6 +78,12 @@ class UserForm : Fragment() {
                 return@setOnClickListener
             }
 
+            if (utilities.isIbanEmpty(ibanEditText)) {
+                return@setOnClickListener
+            }
+
+            val ibanNoSpaces = iban.replace("\\s".toRegex(), "")
+
             val user = Person(
                 name = name,
                 lastName = lastName,
@@ -86,7 +92,7 @@ class UserForm : Fragment() {
                 city = city,
                 cp = cpText,
                 isUser = true,
-                iban = iban
+                iban = ibanNoSpaces
             )
 
             CoroutineScope(Dispatchers.IO).launch {
