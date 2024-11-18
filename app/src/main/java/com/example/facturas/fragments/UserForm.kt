@@ -44,19 +44,24 @@ class UserForm : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val user = db.personDao().getUser()
-            CoroutineScope(Dispatchers.Main).launch {
-                nameEditText.setText(user.name)
-                lastNameEditText.setText(user.lastName)
-                fiscalNumberEditText.setText(user.fiscalNumber)
-                addressEditText.setText(user.address)
-                cityEditText.setText(user.city)
-                cpEditText.setText(user.cp)
-                ibanEditText.setText(user.iban)
+            if (user != null) {
+                Log.d("UserForm", "User: ${user.personId}")
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    nameEditText.setText(user.name)
+                    lastNameEditText.setText(user.lastName)
+                    fiscalNumberEditText.setText(user.fiscalNumber)
+                    addressEditText.setText(user.address)
+                    cityEditText.setText(user.city)
+                    cpEditText.setText(user.cp)
+                    ibanEditText.setText(user.iban)
+                }
             }
         }
 
         saveButton.setOnClickListener {
             Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
+
             val name = nameEditText.text.toString()
             val lastName = lastNameEditText.text.toString()
             val fiscalNumber = fiscalNumberEditText.text.toString()

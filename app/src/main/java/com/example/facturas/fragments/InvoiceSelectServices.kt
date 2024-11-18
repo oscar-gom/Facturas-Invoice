@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.facturas.MainApplication
@@ -43,7 +44,6 @@ class InvoiceSelectServices : Fragment() {
             saveServiceDataAndContinue(servicesContainer)
         }
 
-        // Añadir la primera vista de servicio
         addServiceView(servicesContainer)
 
         return view
@@ -64,19 +64,15 @@ class InvoiceSelectServices : Fragment() {
     }
 
     private fun loadServices(spinnerServices: Spinner) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val services = db.serviceDao().getAllServices().value ?: emptyList()
+        db.serviceDao().getAllServices().observe(viewLifecycleOwner) { services ->
             val serviceDescriptions = services.map { it.description }
-
-            withContext(Dispatchers.Main) {
-                val adapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_item,
-                    serviceDescriptions
-                )
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinnerServices.adapter = adapter
-            }
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                serviceDescriptions
+            )
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerServices.adapter = adapter
         }
     }
 
