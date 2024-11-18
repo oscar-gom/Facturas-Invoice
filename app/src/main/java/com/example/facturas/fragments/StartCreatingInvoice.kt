@@ -1,8 +1,8 @@
 package com.example.facturas.fragments
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +10,16 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.facturas.MainApplication
 import com.example.facturas.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class StartCreatingInvoice : Fragment() {
+
+    val db = MainApplication.database
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -24,10 +30,43 @@ class StartCreatingInvoice : Fragment() {
 
         val buttonCreateInvoice: Button = view.findViewById(R.id.button_create_invoice)
         buttonCreateInvoice.setOnClickListener {
-            showDisclaimerDialog()
+            checkIfMinimumQueriesExist()
         }
 
         return view
+    }
+
+    private fun checkIfMinimumQueriesExist() {
+        Toast.makeText(
+            requireContext(),
+            "Comprobando si existen consultas mínimas",
+            Toast.LENGTH_SHORT
+        ).show()
+        CoroutineScope(Dispatchers.IO).launch {
+            val user = db.personDao().getUser()
+            Log.d("StartCreatingInvoice", "User: ${user.personId}")
+            val client = db.personDao().getLastClientId()
+            Log.d("StartCreatingInvoice", "Clients: ${client}")
+            val service = db.serviceDao().getLastServiceId()
+            Log.d("StartCreatingInvoice", "Services: ${service}")
+
+            if (user.personId == 0 || client == 0 || service == 0) {
+                Log.d("StartCreatingInvoice", "No existen consultas mínimas")
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(
+                        requireContext(),
+                        "No existen consultas mínimas",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    Log.d("StartCreatingInvoice", "Existen consultas mínimas")
+                    showDisclaimerDialog()
+                }
+
+            }
+        }
     }
 
     private fun showDisclaimerDialog() {

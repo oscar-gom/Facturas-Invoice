@@ -3,6 +3,7 @@ package com.example.facturas.fragments
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.InputFilter
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class UserForm : Fragment() {
     val db = MainApplication.database
-    val utilities = PersonUtilities()
+    private val utilities = PersonUtilities()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -41,19 +42,21 @@ class UserForm : Fragment() {
         fiscalNumberEditText.filters = arrayOf(InputFilter.LengthFilter(9))
         cpEditText.filters = arrayOf(InputFilter.LengthFilter(5))
 
-        db.personDao().getUser().observe(viewLifecycleOwner) { user ->
-            user?.let {
-                nameEditText.setText(it.name)
-                lastNameEditText.setText(it.lastName)
-                fiscalNumberEditText.setText(it.fiscalNumber)
-                addressEditText.setText(it.address)
-                cityEditText.setText(it.city)
-                cpEditText.setText(it.cp)
-                ibanEditText.setText(it.iban)
+        CoroutineScope(Dispatchers.IO).launch {
+            val user = db.personDao().getUser()
+            CoroutineScope(Dispatchers.Main).launch {
+                nameEditText.setText(user.name)
+                lastNameEditText.setText(user.lastName)
+                fiscalNumberEditText.setText(user.fiscalNumber)
+                addressEditText.setText(user.address)
+                cityEditText.setText(user.city)
+                cpEditText.setText(user.cp)
+                ibanEditText.setText(user.iban)
             }
         }
 
         saveButton.setOnClickListener {
+            Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
             val name = nameEditText.text.toString()
             val lastName = lastNameEditText.text.toString()
             val fiscalNumber = fiscalNumberEditText.text.toString()
@@ -73,16 +76,17 @@ class UserForm : Fragment() {
             ) {
                 return@setOnClickListener
             }
+            Log.d("UserForm", "EditTexts: passed")
 
             if (utilities.fiscalNumberCheck(fiscalNumber, fiscalNumberEditText)) {
                 return@setOnClickListener
             }
+            Log.d("UserForm", "FiscalNumber: passed")
 
             if (utilities.isIbanEmpty(ibanEditText)) {
                 return@setOnClickListener
             }
-
-            val ibanNoSpaces = iban.replace("\\s".toRegex(), "")
+            Log.d("UserForm", "Iban: passed")
 
             val user = Person(
                 name = name,
@@ -92,12 +96,14 @@ class UserForm : Fragment() {
                 city = city,
                 cp = cpText,
                 isUser = true,
-                iban = ibanNoSpaces
+                iban = iban
             )
 
             CoroutineScope(Dispatchers.IO).launch {
                 db.personDao().deleteUser()
+                Log.d("UserForm", "User deleted")
                 db.personDao().addPerson(user)
+                Log.d("UserForm", "User added")
                 CoroutineScope(Dispatchers.Main).launch {
                     Toast.makeText(
                         requireContext(),
