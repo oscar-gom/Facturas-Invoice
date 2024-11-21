@@ -9,5 +9,5 @@ data class Service(
     val serviceId: Int = 0,
     val description: String,
     val price: Double,
-    val tax: Double,
+    val tax: Int,
 )
