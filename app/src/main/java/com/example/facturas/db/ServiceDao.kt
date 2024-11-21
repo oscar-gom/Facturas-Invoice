@@ -20,8 +20,8 @@ interface ServiceDao {
     @Query("SELECT * FROM Service WHERE serviceId = :serviceId")
     fun getService(serviceId: Int): Service
 
-    @Query("SELECT * FROM Service WHERE description LIKE :description")
-    fun getServiceByDescription(description: String): Service
+    @Query("SELECT serviceId FROM Service WHERE description LIKE :description")
+    fun getServiceIdByDescription(description: String): Int
 
     @Query("SELECT EXISTS(SELECT 1 FROM Service WHERE description = :description)")
     fun isDescriptionExists(description: String): Boolean

@@ -2,6 +2,7 @@ package com.example.facturas.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.facturas.MainApplication
@@ -41,7 +41,9 @@ class InvoiceSelectServices : Fragment() {
         }
 
         buttonContinue.setOnClickListener {
-            saveServiceDataAndContinue(servicesContainer)
+            CoroutineScope(Dispatchers.Main).launch {
+                saveServiceDataAndContinue(servicesContainer)
+            }
         }
 
         addServiceView(servicesContainer)
@@ -49,16 +51,22 @@ class InvoiceSelectServices : Fragment() {
         return view
     }
 
+    @SuppressLint("MissingInflatedId")
     private fun addServiceView(container: LinearLayout) {
         val serviceView = layoutInflater.inflate(R.layout.service_item, container, false)
         val spinnerServices: Spinner = serviceView.findViewById(R.id.spinner_services)
         val editTextUnits: EditText = serviceView.findViewById(R.id.edittext_units)
         val editTextDiscount: EditText = serviceView.findViewById(R.id.edittext_discount)
+        val buttonRemoveService: Button = serviceView.findViewById(R.id.button_remove_service)
 
         loadServices(spinnerServices)
 
         editTextUnits.setText("1")
         editTextDiscount.setText("0")
+
+        buttonRemoveService.setOnClickListener {
+            container.removeView(serviceView)
+        }
 
         container.addView(serviceView)
     }
@@ -76,7 +84,7 @@ class InvoiceSelectServices : Fragment() {
         }
     }
 
-    private fun saveServiceDataAndContinue(container: LinearLayout) {
+    private suspend fun saveServiceDataAndContinue(container: LinearLayout) {
         val serviceIds = mutableListOf<Int>()
         val units = mutableListOf<Int>()
         val discounts = mutableListOf<Float>()
@@ -88,13 +96,27 @@ class InvoiceSelectServices : Fragment() {
             val editTextDiscount: EditText = serviceView.findViewById(R.id.edittext_discount)
 
             val selectedService = spinnerServices.selectedItem.toString()
-            val serviceId = getServiceIdByDescription(selectedService)
+            val serviceId = withContext(Dispatchers.IO) {
+                db.serviceDao().getServiceIdByDescription(selectedService)
+            }
             val unit = editTextUnits.text.toString().toInt()
             val discount = editTextDiscount.text.toString().toFloat()
 
             serviceIds.add(serviceId)
             units.add(unit)
             discounts.add(discount)
+        }
+
+        for (service in serviceIds) {
+            Log.d("InvoiceSelectServices", "Service ID: $service")
+        }
+
+        for (unit in units) {
+            Log.d("InvoiceSelectServices", "Unit: $unit")
+        }
+
+        for (discount in discounts) {
+            Log.d("InvoiceSelectServices", "Discount: $discount")
         }
 
         val action = InvoiceSelectServicesDirections.actionInvoiceSelectServicesToInvoiceSelectSummary(
@@ -104,13 +126,5 @@ class InvoiceSelectServices : Fragment() {
             servicesDiscount = discounts.toFloatArray(),
         )
         findNavController().navigate(action)
-    }
-
-    private fun getServiceIdByDescription(description: String): Int {
-        var serviceId = 0
-        CoroutineScope(Dispatchers.IO).launch {
-            serviceId = db.serviceDao().getServiceByDescription(description).serviceId
-        }
-        return serviceId
     }
 }
