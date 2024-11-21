@@ -87,7 +87,7 @@ class InvoiceSelectServices : Fragment() {
     private suspend fun saveServiceDataAndContinue(container: LinearLayout) {
         val serviceIds = mutableListOf<Int>()
         val units = mutableListOf<Int>()
-        val discounts = mutableListOf<Float>()
+        val discounts = mutableListOf<Int>()
 
         for (i in 0 until container.childCount) {
             val serviceView = container.getChildAt(i)
@@ -100,7 +100,7 @@ class InvoiceSelectServices : Fragment() {
                 db.serviceDao().getServiceIdByDescription(selectedService)
             }
             val unit = editTextUnits.text.toString().toInt()
-            val discount = editTextDiscount.text.toString().toFloat()
+            val discount = editTextDiscount.text.toString().toInt()
 
             serviceIds.add(serviceId)
             units.add(unit)
@@ -123,7 +123,7 @@ class InvoiceSelectServices : Fragment() {
             clientId = args.clientId,
             servicesId = serviceIds.toIntArray(),
             servicesUnits = units.toIntArray(),
-            servicesDiscount = discounts.toFloatArray(),
+            servicesDiscount = discounts.toIntArray(),
         )
         findNavController().navigate(action)
     }

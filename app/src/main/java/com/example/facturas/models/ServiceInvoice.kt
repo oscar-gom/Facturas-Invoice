@@ -12,9 +12,9 @@ data class ServiceInvoice(
     val serviceInvoiceId: Int,
     val description: String,
     val price: Double,
-    val tax: Double,
+    val tax: Int,
     val units: Int = 1,
-    val discount: Double = 0.0,
+    val discount: Int = 0,
     val subTotal: Double = BigDecimal((price * ((100 - discount) / 100)) * units).setScale(
         2,
         RoundingMode.HALF_EVEN
