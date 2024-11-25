@@ -3,7 +3,6 @@ package com.example.facturas.db
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.facturas.models.Service
@@ -30,7 +29,7 @@ interface ServiceDao {
     fun getLastServiceId(): Int
 
     @Query("SELECT * FROM Service WHERE serviceId = :serviceId")
-    fun getServiceFromId(serviceId: Int): Service
+    fun getServiceById(serviceId: Int): Service
 
     @Upsert
     fun addService(service: Service)
