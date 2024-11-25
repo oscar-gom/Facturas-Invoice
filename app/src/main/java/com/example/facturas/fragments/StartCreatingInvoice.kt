@@ -16,6 +16,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class StartCreatingInvoice : Fragment() {
 
@@ -44,15 +45,15 @@ class StartCreatingInvoice : Fragment() {
         ).show()
         CoroutineScope(Dispatchers.IO).launch {
             val user = db.personDao().getUser()
-            Log.d("StartCreatingInvoice", "User: ${user.personId}")
+            Log.d("StartCreatingInvoice", "User: ${user}")
             val client = db.personDao().getLastClientId()
             Log.d("StartCreatingInvoice", "Clients: ${client}")
             val service = db.serviceDao().getLastServiceId()
             Log.d("StartCreatingInvoice", "Services: ${service}")
 
-            if (user.personId == 0 || client == 0 || service == 0) {
+            if (user == null || client == 0 || service == 0) {
                 Log.d("StartCreatingInvoice", "No existen consultas mínimas")
-                CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.Main) {
                     Toast.makeText(
                         requireContext(),
                         "No existen consultas mínimas",
@@ -60,7 +61,7 @@ class StartCreatingInvoice : Fragment() {
                     ).show()
                 }
             } else {
-                CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.Main) {
                     Log.d("StartCreatingInvoice", "Existen consultas mínimas")
                     showDisclaimerDialog()
                 }
