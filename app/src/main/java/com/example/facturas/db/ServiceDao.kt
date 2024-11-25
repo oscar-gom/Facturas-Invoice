@@ -29,6 +29,9 @@ interface ServiceDao {
     @Query("SELECT serviceId FROM Service ORDER BY serviceId DESC LIMIT 1")
     fun getLastServiceId(): Int
 
+    @Query("SELECT * FROM Service WHERE serviceId = :serviceId")
+    fun getServiceFromId(serviceId: Int): Service
+
     @Upsert
     fun addService(service: Service)
 
