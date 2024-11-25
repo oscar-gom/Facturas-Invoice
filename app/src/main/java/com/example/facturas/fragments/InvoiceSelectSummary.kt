@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 class InvoiceSelectSummary : Fragment() {
     private val args: InvoiceSelectSummaryArgs by navArgs()
     private val db = MainApplication.database
-
+    private val prices = mutableListOf<Double>()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -53,7 +53,7 @@ class InvoiceSelectSummary : Fragment() {
             withContext(Dispatchers.Main) {
                 for (i in servicesList.indices) {
                     services.text =
-                        "${services.text} ${servicesList[i].description} x${units[i]} -${discounts[i]}% \n"
+                        "${services.text} ${servicesList[i].description} - ${servicesList[i].price} x${units[i]} -${discounts[i]}% \n"
                 }
             }
         }
