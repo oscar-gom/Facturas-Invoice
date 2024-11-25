@@ -61,7 +61,7 @@
 
         <!-- Subtotal -->
         <TextView
-            android:id="@+id/subtotal"
+            android:id="@+id/subtotal_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Subtotal"
@@ -70,7 +70,13 @@
 
         <!-- Total -->
         <TextView
-            android:id="@+id/total"
+            android:id="@+id/subtotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/total_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Total"
@@ -78,6 +84,12 @@
             android:layout_marginTop="8dp" />
 
         <!-- Botón Crear Factura -->
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
         <Button
             android:id="@+id/button_create_invoice"
             style="@style/Widget.Material3.Button.ElevatedButton"
