@@ -11,19 +11,28 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.facturas.MainApplication
 import com.example.facturas.R
+import com.example.facturas.models.Person
+import com.example.facturas.models.PersonInvoice
 import com.example.facturas.models.Service
+import com.example.facturas.models.ServiceInvoice
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.time.Year
 
 class InvoiceSelectSummary : Fragment() {
     private val args: InvoiceSelectSummaryArgs by navArgs()
     private val db = MainApplication.database
     private var subtotal: Double = 0.0
     private var total: Double = 0.0
+    private val servicesList = mutableListOf<Service>()
+    private val units = args.servicesUnits
+    private val discounts = args.servicesDiscount
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -36,19 +45,89 @@ class InvoiceSelectSummary : Fragment() {
         val services = view.findViewById<TextView>(R.id.services)
         val subtotalText = view.findViewById<TextView>(R.id.subtotal)
         val totalText = view.findViewById<TextView>(R.id.total)
+        val button_create = view.findViewById<TextView>(R.id.button_create_invoice)
 
         getClient(clientName, clientNif)
         getServices(services, subtotalText, totalText)
 
+        button_create.setOnClickListener {
+            showConfirmationDialog()
+        }
+
         return view
+    }
+
+    private fun showConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("¿Seguro que quieres crear esta factura?")
+            .setPositiveButton("Sí") { dialog, _ ->
+                CoroutineScope(Dispatchers.Main).launch {
+                    createInvoice()
+                }
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private suspend fun createInvoice() {
+        // Create history data
+        val servicesInvoiceHistory = mutableListOf<ServiceInvoice>()
+        servicesList.forEach() { service ->
+            servicesInvoiceHistory.add(
+                ServiceInvoice(
+                    serviceInvoiceId = service.serviceId,
+                    description = service.description,
+                    price = service.price,
+                    tax = service.tax,
+                    units = units[servicesList.indexOf(service)],
+                    discount = discounts[servicesList.indexOf(service)]
+                )
+            )
+        }
+        val client: Person = CoroutineScope(Dispatchers.IO).async {
+            db.personDao().getPersonById(args.clientId)
+        }.await()
+        val clientHistory = PersonInvoice(
+            personInvoiceId = client.personId,
+            name = client.name,
+            lastName = client.lastName,
+            fiscalNumber = client.fiscalNumber,
+            address = client.address,
+            city = client.city,
+            cp = client.cp,
+            isUser = false
+        )
+        val user: Person = CoroutineScope(Dispatchers.IO).async {
+            db.personDao().getUser()
+        }.await()
+        val userHistory = PersonInvoice(
+            personInvoiceId = user.personId,
+            name = user.name,
+            lastName = user.lastName,
+            fiscalNumber = user.fiscalNumber,
+            address = user.address,
+            city = user.city,
+            cp = user.cp,
+            isUser = true
+        )
+        templateCreation(clientHistory, userHistory, servicesInvoiceHistory)
+    }
+
+    private suspend fun templateCreation(
+        receiver: PersonInvoice,
+        emitter: PersonInvoice,
+        services: MutableList<ServiceInvoice>
+    ) {
+        val num: Int = CoroutineScope(Dispatchers.IO).async {
+            db.invoiceDao().getLastInvoiceId() + 1
+        }.await()
+        val invoiceNum = "${Year.now().value}-$num"
     }
 
     @SuppressLint("SetTextI18n")
     private fun getServices(services: TextView, subtotalText: TextView, totalText: TextView) {
-        val servicesList = mutableListOf<Service>()
-        val units = args.servicesUnits
-        val discounts = args.servicesDiscount
-
         CoroutineScope(Dispatchers.IO).launch {
             val servicesIds = args.servicesId
             for (serviceId in servicesIds) {
@@ -76,8 +155,6 @@ class InvoiceSelectSummary : Fragment() {
                 }
             }
         }
-
-
     }
 
     private fun getClient(clientName: TextView, clientNif: TextView) {
