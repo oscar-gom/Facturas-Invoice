@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.facturas.MainApplication
 import com.example.facturas.R
@@ -295,6 +296,9 @@ class InvoiceSelectSummary : Fragment() {
             outputStream.close()
         }
         Toast.makeText(context, "¡Factura creada con exito!", Toast.LENGTH_SHORT).show()
+
+        val action = InvoiceSelectSummaryDirections.actionInvoiceSelectSummaryToStartCreatingInvoice2()
+        findNavController().navigate(action)
     }
 
     private suspend fun saveHistory(
