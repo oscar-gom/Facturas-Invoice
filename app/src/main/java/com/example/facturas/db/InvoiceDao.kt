@@ -17,4 +17,10 @@ interface InvoiceDao {
 
     @Delete
     fun deleteInvoice(invoice: Invoice)
+
+    @Query("SELECT * FROM Invoice WHERE invoiceId = :invoiceId")
+    fun getInvoiceById(invoiceId: Int): Invoice
+
+    @Query("SELECT invoiceId FROM Invoice ORDER BY invoiceId DESC LIMIT 1")
+    fun getLastInvoiceId(): Int
 }

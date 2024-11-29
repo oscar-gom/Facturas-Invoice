@@ -7,11 +7,11 @@ import androidx.room.PrimaryKey
 data class PersonInvoice(
     @PrimaryKey(autoGenerate = true)
     val personInvoiceId: Int = 0,
-    val isUser: Boolean,
     val name: String,
     val lastName: String,
     val fiscalNumber: String,
     val address: String,
     val city: String,
-    val cp: String
+    val cp: String,
+    val isUser: Boolean
 )

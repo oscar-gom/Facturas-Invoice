@@ -4,35 +4,25 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/services_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Título -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Selecciona Servicios"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_gravity="center"
-            android:paddingBottom="16dp" />
-
-        <!-- Botón Añadir Servicio -->
-        <Button
-            android:id="@+id/button_add_service"
-            style="@style/Widget.Material3.Button.ElevatedButton"
+        <LinearLayout
+            android:id="@+id/services_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Añadir Servicio"
-            android:layout_marginBottom="16dp" />
+            android:orientation="vertical" />
 
-        <!-- Botón Continuar -->
+        <Button
+            android:id="@+id/button_add_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Agregar Servicio" />
+
         <Button
             android:id="@+id/button_continue"
-            style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Continuar" />

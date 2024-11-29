@@ -64,6 +64,6 @@
             android:name="servicesUnits"
             app:argType="integer[]" />
         <argument android:name="servicesDiscount"
-            app:argType="float[]" />
+            app:argType="integer[]" />
     </fragment>
 </navigation>

@@ -53,7 +53,7 @@ class ServiceForm : Fragment() {
             }
 
             val price = priceText.toDouble()
-            val tax = taxText.toDouble()
+            val tax = taxText.toInt()
 
             // Other validations
             if (price <= 0) {

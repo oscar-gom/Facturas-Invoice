@@ -29,7 +29,7 @@ class ClientForm : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_client_form, container, false)
 
-        val nameEditText = view.findViewById<EditText>(R.id.client_name)
+        val nameEditText = view.findViewById<EditText>(R.id.client_name_title)
         val lastNameEditText = view.findViewById<EditText>(R.id.client_last_name)
         val fiscalNumberEditText = view.findViewById<EditText>(R.id.client_fiscal_number)
         val addressEditText = view.findViewById<EditText>(R.id.client_address)
@@ -101,6 +101,12 @@ class ClientForm : Fragment() {
                     "¡Exito! Cliente añadido a la agenda",
                     Toast.LENGTH_SHORT
                 ).show()
+                nameEditText.text.clear()
+                lastNameEditText.text.clear()
+                fiscalNumberEditText.text.clear()
+                addressEditText.text.clear()
+                cityEditText.text.clear()
+                cpEditText.text.clear()
             }
         }
     }

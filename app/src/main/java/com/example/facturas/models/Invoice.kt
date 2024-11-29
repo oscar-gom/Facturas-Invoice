@@ -9,10 +9,11 @@ import java.time.LocalDate
 data class Invoice (
     @PrimaryKey(autoGenerate = true)
     val invoiceId: Int = 0,
+    val invoiceNum: String,
     val date: LocalDate = LocalDate.now(),
-    @Embedded val client: Person,
+    @Embedded(prefix = "client_") val client: PersonInvoice,
+    @Embedded(prefix = "user_") val user: PersonInvoice,
     val services: List<ServiceInvoice>,
-    val paymentMethod: PaymentMethod,
-    val invoiceIban: String?,
+    val subtotal: Double = services.sumOf { it.subTotal },
     val total: Double = services.sumOf { it.total }
 )
