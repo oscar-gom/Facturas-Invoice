@@ -107,18 +107,10 @@ class InvoiceSelectServices : Fragment() {
             discounts.add(discount)
         }
 
-        for (service in serviceIds) {
-            Log.d("InvoiceSelectServices", "Service ID: $service")
-        }
-
-        for (unit in units) {
-            Log.d("InvoiceSelectServices", "Unit: $unit")
-        }
-
-        for (discount in discounts) {
-            Log.d("InvoiceSelectServices", "Discount: $discount")
-        }
-
+        Log.d("InvoiceSelectServices", "serviceIds: $serviceIds")
+        Log.d("InvoiceSelectServices", "units: $units")
+        Log.d("InvoiceSelectServices", "discounts: $discounts")
+        Log.d("InvoiceSelectServices", "clientId: ${args.clientId}")
         val action = InvoiceSelectServicesDirections.actionInvoiceSelectServicesToInvoiceSelectSummary(
             clientId = args.clientId,
             servicesId = serviceIds.toIntArray(),

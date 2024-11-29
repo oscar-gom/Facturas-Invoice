@@ -2,27 +2,35 @@ package com.example.facturas.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.facturas.MainApplication
 import com.example.facturas.R
+import com.example.facturas.models.Invoice
 import com.example.facturas.models.Person
 import com.example.facturas.models.PersonInvoice
 import com.example.facturas.models.Service
 import com.example.facturas.models.ServiceInvoice
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.itextpdf.html2pdf.HtmlConverter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.time.LocalDate
 import java.time.Year
 
 class InvoiceSelectSummary : Fragment() {
@@ -31,26 +39,24 @@ class InvoiceSelectSummary : Fragment() {
     private var subtotal: Double = 0.0
     private var total: Double = 0.0
     private val servicesList = mutableListOf<Service>()
-    private val units = args.servicesUnits
-    private val discounts = args.servicesDiscount
+    private var invoiceNum: String = ""
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_invoice_select_summary, container, false)
-
         val clientName = view.findViewById<TextView>(R.id.client_name)
         val clientNif = view.findViewById<TextView>(R.id.client_nif)
         val services = view.findViewById<TextView>(R.id.services)
         val subtotalText = view.findViewById<TextView>(R.id.subtotal)
         val totalText = view.findViewById<TextView>(R.id.total)
-        val button_create = view.findViewById<TextView>(R.id.button_create_invoice)
+        val buttonCreate = view.findViewById<Button>(R.id.button_create_invoice)
 
         getClient(clientName, clientNif)
         getServices(services, subtotalText, totalText)
 
-        button_create.setOnClickListener {
+        buttonCreate.setOnClickListener {
             showConfirmationDialog()
         }
 
@@ -81,8 +87,8 @@ class InvoiceSelectSummary : Fragment() {
                     description = service.description,
                     price = service.price,
                     tax = service.tax,
-                    units = units[servicesList.indexOf(service)],
-                    discount = discounts[servicesList.indexOf(service)]
+                    units = args.servicesUnits[servicesList.indexOf(service)],
+                    discount = args.servicesDiscount[servicesList.indexOf(service)]
                 )
             )
         }
@@ -112,10 +118,186 @@ class InvoiceSelectSummary : Fragment() {
             cp = user.cp,
             isUser = true
         )
-        templateCreation(clientHistory, userHistory, servicesInvoiceHistory)
+        saveHistory(clientHistory, userHistory, servicesInvoiceHistory)
+        templateCreation(client, user, servicesInvoiceHistory)
     }
 
     private suspend fun templateCreation(
+        receiver: Person,
+        emitter: Person,
+        services: MutableList<ServiceInvoice>
+    ) {
+
+        Log.d("InvoiceSelectSummary", "receiver: ${receiver.name}")
+        Log.d("InvoiceSelectSummary", "emitter: ${emitter.name}")
+        for (service in services) {
+            Log.d("InvoiceSelectSummary", "service: ${service.description}")
+        }
+
+
+        val htmlContent = """
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .invoice-container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .invoice-header, .invoice-parties {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .invoice-header div, .invoice-parties div {
+            width: 30%;
+        }
+        .invoice-header div p, .invoice-parties div p {
+            margin: 5px 0;
+            white-space: nowrap; /* Evita que el texto pase a la siguiente línea */
+        }
+        .invoice-header div p span, .invoice-parties div p span {
+            font-weight: bold;
+        }
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        .invoice-table th {
+            background-color: #f4f4f4;
+        }
+        .invoice-summary {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        .invoice-summary div {
+            width: 30%;
+        }
+        .invoice-summary p {
+            margin: 5px 0;
+        }
+        .invoice-summary p span {
+            font-weight: bold;
+        }
+        .invoice-summary span.total {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .invoice-conditions {
+            margin-top: 20px;
+        }
+        .invoice-conditions p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="invoice-header">
+            <div>
+                <p><span>Número de Factura:</span> ${invoiceNum}</p>
+                <p><span>Fecha de Emisión:</span> ${LocalDate.now()}</p>
+            </div>
+        </div>
+        <div class="invoice-parties">
+            <div>
+                <p><span>Emisor:</span></p>
+                <p>${emitter.name} ${emitter.lastName}</p>
+                <p>${emitter.fiscalNumber}</p>
+                <p>${emitter.address}</p>
+                <p>${emitter.city}</p>
+                <p>${emitter.cp}</p>
+            </div>
+            <div style="text-align: right;">
+                <p><span>Receptor:</span></p>
+                <p>${receiver.name} ${receiver.lastName}</p>
+                <p>${receiver.fiscalNumber}</p>
+                <p>${emitter.city}</p>
+                <p>${emitter.cp}</p>
+            </div>
+        </div>
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Unidades</th>
+                    <th>Descuento</th>
+                    <th>Subtotal</th>
+                    <th>IVA</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${
+            services.forEach { service ->
+                """
+                    <tr>
+                        <td>${service.description}</td>
+                        <td>${service.units}</td>
+                        <td>${service.discount}%</td>
+                        <td>${service.subTotal}</td>
+                        <td>${service.tax}%</td>
+                        <td>${service.total}</td>
+                    </tr>
+                    """
+            }
+        }
+            </tbody>
+        </table>
+        <div class="invoice-summary">
+            <div>
+                <p><span>Subtotal:</span> ${services.sumOf { it.subTotal }}€</p>
+                <p><span>Total:</span> <span class="total">${services.sumOf { it.total }}€</span></p>
+            </div>
+        </div>
+        <div class="invoice-conditions">
+            <p><span>Forma de Pago:</span></p>
+            <p>IBAN: ${emitter.iban}</p>
+        </div>
+    </div>
+</body>
+</html>
+""".trimIndent()
+
+        val fileName = "factura-${invoiceNum}.pdf"
+        val downloadsDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val file = File(downloadsDir, fileName)
+        if (file.exists()) {
+            file.delete()
+        }
+        Toast.makeText(context, "Creando la factura...", Toast.LENGTH_SHORT).show()
+        val outputStream = withContext(Dispatchers.IO) {
+            FileOutputStream(file)
+        }
+        HtmlConverter.convertToPdf(htmlContent, outputStream)
+        withContext(Dispatchers.IO) {
+            outputStream.close()
+        }
+        Toast.makeText(context, "¡Factura creada con exito!", Toast.LENGTH_SHORT).show()
+    }
+
+    private suspend fun saveHistory(
         receiver: PersonInvoice,
         emitter: PersonInvoice,
         services: MutableList<ServiceInvoice>
@@ -123,7 +305,22 @@ class InvoiceSelectSummary : Fragment() {
         val num: Int = CoroutineScope(Dispatchers.IO).async {
             db.invoiceDao().getLastInvoiceId() + 1
         }.await()
-        val invoiceNum = "${Year.now().value}-$num"
+        invoiceNum = "${Year.now().value}-$num"
+        val invoice = Invoice(
+            invoiceNum = invoiceNum,
+            client = receiver,
+            user = emitter,
+            services = services,
+        )
+
+        CoroutineScope(Dispatchers.IO).launch {
+            db.personInvoiceDao().addPersonInvoice(receiver)
+            db.personInvoiceDao().addPersonInvoice(emitter)
+            services.forEach() { service ->
+                db.serviceInvoiceDao().addServiceInvoice(service)
+            }
+            db.invoiceDao().addInvoice(invoice)
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -137,10 +334,10 @@ class InvoiceSelectSummary : Fragment() {
             withContext(Dispatchers.Main) {
                 for (i in servicesList.indices) {
                     services.text =
-                        "${services.text} ${servicesList[i].description}: ${servicesList[i].price}€ x${units[i]} -${discounts[i]}% \n"
+                        "${services.text} ${servicesList[i].description}: ${servicesList[i].price}€ x${args.servicesUnits[i]} -${args.servicesDiscount[i]}% \n"
 
                     val serviceSubtotal =
-                        BigDecimal((servicesList[i].price * (1 - (discounts[i] / 100.0))) * units[i]).setScale(
+                        BigDecimal((servicesList[i].price * (1 - (args.servicesDiscount[i] / 100.0))) * args.servicesUnits[i]).setScale(
                             2, RoundingMode.HALF_EVEN
                         ).toDouble()
                     subtotal += serviceSubtotal
