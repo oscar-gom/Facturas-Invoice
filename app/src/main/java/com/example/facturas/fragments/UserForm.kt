@@ -60,8 +60,6 @@ class UserForm : Fragment() {
         }
 
         saveButton.setOnClickListener {
-            Toast.makeText(context, "click", Toast.LENGTH_SHORT).show()
-
             val name = nameEditText.text.toString()
             val lastName = lastNameEditText.text.toString()
             val fiscalNumber = fiscalNumberEditText.text.toString()
