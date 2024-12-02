@@ -174,7 +174,7 @@ class InvoiceSelectSummary : Fragment() {
             margin-bottom: 20px;
         }
         .invoice-header div, .invoice-parties div {
-            width: 30%;
+            width: 45%;
         }
         .invoice-header div p, .invoice-parties div p {
             margin: 5px 0;
@@ -182,6 +182,9 @@ class InvoiceSelectSummary : Fragment() {
         }
         .invoice-header div p span, .invoice-parties div p span {
             font-weight: bold;
+        }
+        .invoice-parties div:last-child {
+            text-align: right;
         }
         .invoice-table {
             width: 100%;
@@ -279,7 +282,8 @@ class InvoiceSelectSummary : Fragment() {
 """.trimIndent()
 
         val fileName = "factura-${invoiceNum}.pdf"
-        val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val downloadsDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val file = File(downloadsDir, fileName)
         if (file.exists()) {
             file.delete()
@@ -294,7 +298,8 @@ class InvoiceSelectSummary : Fragment() {
         }
         Toast.makeText(context, "¡Factura creada con éxito!", Toast.LENGTH_SHORT).show()
 
-        val action = InvoiceSelectSummaryDirections.actionInvoiceSelectSummaryToStartCreatingInvoice2()
+        val action =
+            InvoiceSelectSummaryDirections.actionInvoiceSelectSummaryToStartCreatingInvoice2()
         findNavController().navigate(action)
     }
 
